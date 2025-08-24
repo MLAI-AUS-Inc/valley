@@ -39,19 +39,60 @@ This will create:
 - Row Level Security (RLS) policies
 - Database triggers for automatic signup
 - Proper indexes
+- Storage bucket for startup logos (`startup-logos`)
 
-### 3. Set Up Storage (Optional - for images)
+### 3. Set Up Storage Bucket
 
-In your Supabase dashboard, go to **Storage**:
+The storage bucket for startup logos is automatically created when you run the migration SQL above. However, if you need to create it manually or want to understand what's being created:
 
-1. Create bucket: `logos` (public)
-2. Create bucket: `update-images` (public)
+**What gets created:**
+- A `startup-logos` bucket (public)
+- 5MB file size limit
+- Restricted to image formats: JPEG, PNG, GIF, WebP
+- Row Level Security (RLS) policies:
+  - Public read access
+  - Authenticated users can upload
+  - Users can update/delete their own uploads
 
-Or run this SQL:
+**Manual setup (if needed):**
+If the storage bucket wasn't created automatically, run this in your Supabase SQL Editor:
+
 ```sql
-INSERT INTO storage.buckets (id, name, public) VALUES ('logos', 'logos', true);
-INSERT INTO storage.buckets (id, name, public) VALUES ('update-images', 'update-images', true);
+-- Create the storage bucket
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'startup-logos',
+  'startup-logos',
+  true,
+  5242880, -- 5MB limit
+  ARRAY['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+);
+
+-- Create RLS policies
+CREATE POLICY "Public Access" ON storage.objects
+  FOR SELECT USING (bucket_id = 'startup-logos');
+
+CREATE POLICY "Authenticated users can upload logos" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'startup-logos' 
+    AND auth.role() = 'authenticated'
+  );
+
+CREATE POLICY "Users can update their own logos" ON storage.objects
+  FOR UPDATE USING (
+    bucket_id = 'startup-logos' 
+    AND auth.role() = 'authenticated'
+  );
+
+CREATE POLICY "Users can delete their own logos" ON storage.objects
+  FOR DELETE USING (
+    bucket_id = 'startup-logos' 
+    AND auth.role() = 'authenticated'
+  );
 ```
+
+**Verification:**
+Go to **Storage** in your Supabase dashboard and verify the `startup-logos` bucket exists and is configured as public.
 
 ## Running the App
 
