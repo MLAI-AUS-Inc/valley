@@ -20,7 +20,7 @@ export function HamburgerMenu({ children, className = "" }: HamburgerMenuProps) 
     setIsOpen(false)
   }
 
-  const handleMenuClick = (e: React.MouseEvent) => {
+  const handleMenuClick = () => {
     // Close menu when any menu item is clicked
     closeMenu()
   }

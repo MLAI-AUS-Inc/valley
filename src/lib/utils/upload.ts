@@ -11,7 +11,7 @@ export async function uploadFile(
   const fileName = path || `${Date.now()}-${Math.random().toString(36).substring(2)}-${file.name}`
   
   try {
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(bucket)
       .upload(fileName, file, {
         cacheControl: '3600',
@@ -32,9 +32,10 @@ export async function uploadFile(
       .getPublicUrl(fileName)
 
     return publicUrl
-  } catch (err: any) {
+  } catch (err: unknown) {
     // Don't create blob URLs as fallback to avoid memory leaks
-    throw new Error(`Upload failed: ${err.message}`)
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+    throw new Error(`Upload failed: ${errorMessage}`)
   }
 }
 

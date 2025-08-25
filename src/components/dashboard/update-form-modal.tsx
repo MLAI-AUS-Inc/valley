@@ -89,9 +89,14 @@ export function UpdateFormModal({ children, update, updateId }: UpdateFormModalP
           router.refresh()
         }
       }
-    } catch (err: any) {
-      if (err.errors) {
-        setError(err.errors[0].message)
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'errors' in err && Array.isArray(err.errors) && err.errors.length > 0) {
+        const firstError = err.errors[0]
+        if (firstError && typeof firstError === 'object' && 'message' in firstError) {
+          setError(String(firstError.message))
+        } else {
+          setError('Validation error occurred')
+        }
       } else {
         setError("An unexpected error occurred")
       }

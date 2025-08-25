@@ -59,7 +59,7 @@ export function DeleteUpdateButton({ updateId, updateTitle }: DeleteUpdateButton
           </p>
           {updateTitle && (
             <p className="mt-2 font-medium text-foreground">
-              "{updateTitle}"
+              &ldquo;{updateTitle}&rdquo;
             </p>
           )}
         </div>

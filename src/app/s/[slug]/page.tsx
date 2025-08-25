@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -8,12 +8,11 @@ import { Logo } from "@/components/logo"
 import { MainNav } from "@/components/main-nav"
 import Link from "next/link"
 import { MapPin, Globe, ExternalLink, Twitter, Linkedin, Calendar, MessageSquare } from "lucide-react"
-import { UpdateWithStartup } from "@/lib/types/database"
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 async function getStartupData(slug: string) {
@@ -61,7 +60,8 @@ async function getStartupData(slug: string) {
 }
 
 export default async function StartupPage({ params }: PageProps) {
-  const data = await getStartupData(params.slug)
+  const { slug } = await params
+  const data = await getStartupData(slug)
   
   if (!data) {
     notFound()
@@ -250,7 +250,7 @@ export default async function StartupPage({ params }: PageProps) {
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
                 <h3 className="text-lg font-semibold text-foreground">
-                  Want to share your startup's journey?
+                  Want to share your startup&apos;s journey?
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   Join the directory and start sharing your updates with the community.
