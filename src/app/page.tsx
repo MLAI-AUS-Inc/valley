@@ -20,9 +20,10 @@ async function getLatestUpdates(): Promise<UpdateWithStartup[]> {
       .from('updates')
       .select(`
         *,
-        startup:startups(*)
+        startup:startups!inner(*)
       `)
       .eq('is_published', true)
+      .eq('startup.is_public', true)
       .order('published_at', { ascending: false })
       .limit(20)
 
@@ -45,7 +46,7 @@ export default async function HomePage() {
   const isSupabaseConfigured = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#0f0f0f' }}>
+    <div className="min-h-screen bg-[#0f0f0f]">
       <Suspense fallback={null}>
         <EmailVerificationHandler />
       </Suspense>

@@ -18,6 +18,7 @@ export function SponsorSection() {
                 width={120}
                 height={40}
                 className="h-4 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                style={{ height: 'auto' }}
               />
             </div>
           ))}
