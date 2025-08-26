@@ -56,7 +56,7 @@ export function FileUpload({
         const previewUrl = URL.createObjectURL(file)
         onChange(previewUrl)
       }
-    } catch (err) {
+    } catch {
       setError('Failed to process image')
     } finally {
       setUploading(false)

@@ -11,7 +11,7 @@ export default function NotFound() {
             Startup Not Found
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto">
-            The startup profile you're looking for doesn't exist or may have been made private.
+            The startup profile you&apos;re looking for doesn&apos;t exist or may have been made private.
           </p>
         </div>
         

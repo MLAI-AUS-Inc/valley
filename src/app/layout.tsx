@@ -30,10 +30,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" style={{ colorScheme: 'dark' }}>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${inriaSerif.variable} font-sans antialiased`}
-        style={{ backgroundColor: '#0f0f0f' }}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${inriaSerif.variable} font-sans antialiased bg-[#0f0f0f]`}
       >
         <ThemeProvider>
           {children}

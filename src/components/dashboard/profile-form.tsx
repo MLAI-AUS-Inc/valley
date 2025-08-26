@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { FileUpload } from "@/components/ui/file-upload"
 import { profileSchema, stageOptions, type ProfileFormData } from "@/lib/validations"
 import { Startup } from "@/lib/types/database"
-import { uploadFile, deleteFile } from "@/lib/utils/upload"
+import { uploadFile } from "@/lib/utils/upload"
 import { cardStyle } from "@/lib/utils"
 import { X } from "lucide-react"
 
@@ -66,30 +66,21 @@ export function ProfileForm({ startup }: ProfileFormProps) {
         setSuccess(true)
         router.refresh()
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Provide more specific error messages
-      if (err.message?.includes('Storage bucket not found')) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+      if (errorMessage.includes('Storage bucket not found')) {
         setError('Storage not configured. Please set up storage buckets in your Supabase project.')
-      } else if (err.message?.includes('network')) {
+      } else if (errorMessage.includes('network')) {
         setError('Network error. Please check your connection and try again.')
       } else {
-        setError(err.message || 'Failed to upload logo. Please try again.')
+        setError(errorMessage || 'Failed to upload logo. Please try again.')
       }
     } finally {
       setUploadingLogo(false)
     }
   }
 
-  const handleLogoRemove = async () => {
-    if (formData.logo_url && formData.logo_url !== startup.logo_url) {
-      try {
-        await deleteFile(formData.logo_url)
-      } catch (err) {
-        console.error('Failed to delete old logo:', err)
-      }
-    }
-    setFormData(prev => ({ ...prev, logo_url: "" }))
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -111,11 +102,17 @@ export function ProfileForm({ startup }: ProfileFormProps) {
         setSuccess(true)
         router.refresh()
       }
-    } catch (err: any) {
-      if (err.errors && err.errors.length > 0) {
-        setError(err.errors[0].message)
-      } else if (err.message) {
-        setError(err.message)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+      if (err && typeof err === 'object' && 'errors' in err && Array.isArray(err.errors) && err.errors.length > 0) {
+        const firstError = err.errors[0]
+        if (firstError && typeof firstError === 'object' && 'message' in firstError) {
+          setError(String(firstError.message))
+        } else {
+          setError('Validation error occurred')
+        }
+      } else if (errorMessage) {
+        setError(errorMessage)
       } else {
         setError("An unexpected error occurred. Please check your input and try again.")
       }
@@ -219,7 +216,7 @@ export function ProfileForm({ startup }: ProfileFormProps) {
                   <select
                     id="stage"
                     value={formData.stage}
-                    onChange={(e) => setFormData(prev => ({ ...prev, stage: e.target.value as any }))}
+                    onChange={(e) => setFormData(prev => ({ ...prev, stage: e.target.value as typeof formData.stage }))}
                     disabled={loading}
                     className="w-full px-3 py-2 border border-input bg-background rounded-md text-sm appearance-none pr-8"
                     style={{

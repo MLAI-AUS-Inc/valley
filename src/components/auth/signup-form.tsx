@@ -40,7 +40,7 @@ export function SignUpForm() {
       } else {
         setSuccess(true)
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred")
     } finally {
       setLoading(false)
@@ -64,13 +64,13 @@ export function SignUpForm() {
             <div className="p-4 text-sm text-green-700 bg-green-50 dark:bg-green-950/20 dark:text-green-400 border border-green-200 dark:border-green-800 rounded-md">
               <p className="font-medium">Account created successfully!</p>
               <p className="mt-2">
-                We've sent a confirmation email to <strong>{email}</strong>. 
+                We&apos;ve sent a confirmation email to <strong>{email}</strong>. 
                 Please check your inbox and click the confirmation link to activate your account.
               </p>
             </div>
             
             <div className="text-sm text-muted-foreground">
-              <p>Didn't receive the email? Check your spam folder or contact support.</p>
+              <p>Didn&apos;t receive the email? Check your spam folder or contact support.</p>
             </div>
             
             <div className="flex justify-center pt-8">

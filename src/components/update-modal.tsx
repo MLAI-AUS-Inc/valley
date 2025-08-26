@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import Image from "next/image"
 import ReactMarkdown from "react-markdown"
 import { formatDateShort, cardStyle } from "@/lib/utils"
 
@@ -94,15 +95,14 @@ export function UpdateModal({ update, onClose }: UpdateModalProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {update.images.map((image, index) => (
                   <div key={index} className="space-y-3">
-                    <img
-                      src={image.url}
-                      alt={image.alt || `Update image ${index + 1}`}
-                      className="w-full rounded-lg border border-border shadow-sm"
-                      style={{
-                        aspectRatio: `${image.w} / ${image.h}`,
-                        objectFit: 'cover'
-                      }}
-                    />
+                    <div className="relative w-full rounded-lg border border-border shadow-sm overflow-hidden" style={{ aspectRatio: `${image.w} / ${image.h}` }}>
+                      <Image
+                        src={image.url}
+                        alt={image.alt || `Update image ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     {image.alt && (
                       <p className="text-sm text-muted-foreground">{image.alt}</p>
                     )}

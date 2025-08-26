@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
 import { UpdateFormModal } from "@/components/dashboard/update-form-modal"
 import { formatDateShort } from "@/lib/utils"
 import { Pen, Plus } from "lucide-react"
@@ -74,7 +73,7 @@ export default async function UpdatesPage() {
                 No updates yet
               </h3>
               <p className="text-muted-foreground">
-                Share your first update to let people know what you're working on.
+                Share your first update to let people know what you&apos;re working on.
               </p>
               <UpdateFormModal>
                 <Button

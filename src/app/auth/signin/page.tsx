@@ -29,7 +29,7 @@ export default function SignInPage() {
             
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link 
                   href="/auth/signup" 
                   className="font-medium text-primary hover:text-primary/80 transition-colors"
